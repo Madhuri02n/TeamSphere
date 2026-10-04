@@ -7,7 +7,7 @@ A small full-stack app where a team manager creates teams and players, schedules
 
 **Stack:** React (Vite) · Node.js + Express · MongoDB + Mongoose · C++ (algorithm module) · Postman
 
-LIVE: https://frontend-five-opal-96.vercel.app/
+
 ---
 
 ## 1. Folder structure
