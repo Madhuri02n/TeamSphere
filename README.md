@@ -231,31 +231,4 @@ How Node talks to it: `backend/utils/cppEngine.js` uses `child_process.spawn` to
 Common problems: CORS error → check `VITE_API_URL`; "Could not connect to MongoDB" → wrong password or Atlas IP not allowed; blank page after refresh → missing rewrite file; "C++ engine not found" → the build command did not run `npm run build:cpp`.
 
 ---
-
-## 9. 15-hour plan
-
-| Hours | Do this |
-|---|---|
-| 0–1.5 | Run everything. Click through each page. Read this README. |
-| 1.5–3.5 | Backend: `server.js`, one model, `teamController.js`, `errorHandler.js`. Understand request → response. |
-| 3.5–6 | **`matchController.js`** line by line. Redraw the overlap table from memory on paper. |
-| 6–7.5 | Players + flights controllers (same pattern as teams, so skim fast). |
-| 7.5–10 | Frontend: `api.js`, `Teams.jsx` (full), then skim the other pages — they repeat the same pattern. |
-| 10–11.5 | **C++ (spend extra time here):** read `TravelAndScheduleEngine.cpp` and `main.cpp`, run `./engine test`, try the stdin examples by hand, explain each method's complexity. |
-| 11.5–13 | Postman: run the collection, read what each test checks. Break something on purpose and watch it fail. |
-| 13–15 | Deploy, then practise the 2-minute pitch and the questions below out loud. |
-
-**2-minute pitch:** "TeamSphere lets a manager manage teams and players and schedule matches. The core rule is that a team can't play two overlapping matches. When a match is created or rescheduled, the backend loads that day's scheduled matches for both teams, converts times to minutes, and checks `newStart < existingEnd && newEnd > existingStart`. If it overlaps, the API returns a 400 with a clear message, and the React page shows it. The decision logic is written in C++: a compiled program that the Node backend runs with the match data and reads the answer back. Node handles the REST API, validation and MongoDB. The stack is React, Express, MongoDB with Mongoose, and I tested the API with Postman."
-
-## 10. Likely interview questions
-
-- **Why C++ inside a Node project?** The scheduling and flight logic is pure computation, so it is separated into a C++ module that is fast, testable on its own (`./engine test`) and shows OOP/STL. Node does what it is good at: HTTP, JSON and the database.
-- **How do Node and C++ communicate?** Node spawns the compiled program, writes plain text to stdin, and reads stdout. It is the simplest option; the alternatives are a native addon or a C++ web server, both much harder.
-- **Downside of spawning a process per request?** A little start-up cost per call. For heavy traffic I would use a long-running service or a native addon.
-- **Why `<` and `>` and not `<=`?** So back-to-back matches (20:00 end, 20:00 start) are allowed.
-- **Why store times as strings?** Simple, no time-zone bugs, and `HH:MM` / `YYYY-MM-DD` compare correctly. Trade-off: no overnight matches.
-- **What if two people book at the same moment?** Honest answer: a race condition is possible. A fix would be a transaction or a unique slot lock; I kept it simple.
-- **Why `asyncHandler`?** It forwards any error from an async function to the error middleware, so controllers need no try/catch.
-- **Why populate?** Matches store team IDs; `populate` swaps the IDs for team documents so the UI can show names.
-- **How is invalid input handled?** Controller validation throws a 400 error; Mongoose schema rules are a second safety net; the error middleware formats the response.
-- **How would you scale it?** Add an index on `{ date, teamA, teamB }`, add login, and paginate lists.
+scale it?** Add an index on `{ date, teamA, teamB }`, add login, and paginate lists.
