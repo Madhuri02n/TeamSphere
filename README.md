@@ -231,4 +231,4 @@ How Node talks to it: `backend/utils/cppEngine.js` uses `child_process.spawn` to
 Common problems: CORS error → check `VITE_API_URL`; "Could not connect to MongoDB" → wrong password or Atlas IP not allowed; blank page after refresh → missing rewrite file; "C++ engine not found" → the build command did not run `npm run build:cpp`.
 
 ---
-scale it?** Add an index on `{ date, teamA, teamB }`, add login, and paginate lists.
+
