@@ -1,0 +1,985 @@
+{
+  "info": {
+    "name": "TeamSphere API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run the whole collection top to bottom with the Collection Runner. Each request saves IDs for the next ones."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Teams",
+      "item": [
+        {
+          "name": "Create team A (Hyderabad Hawks)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"teamAId\", pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/teams"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamName\": \"Hyderabad Hawks\",\n  \"city\": \"Hyderabad\",\n  \"sport\": \"Cricket\",\n  \"coach\": \"Rahul\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create team B (Chennai Warriors)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"teamBId\", pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/teams"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamName\": \"Chennai Warriors\",\n  \"city\": \"Chennai\",\n  \"sport\": \"Cricket\",\n  \"coach\": \"Suresh\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get teams",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/teams"
+            }
+          }
+        },
+        {
+          "name": "Update team A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/teams/{{teamAId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamName\": \"Hyderabad Hawks\",\n  \"city\": \"Hyderabad\",\n  \"sport\": \"Cricket\",\n  \"coach\": \"Rahul Sharma\"\n}"
+            }
+          }
+        },
+        {
+          "name": "INVALID: empty team name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Team name is required\", function () { pm.expect(pm.response.json().message).to.include(\"Team name is required\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/teams"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamName\": \"\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Players",
+      "item": [
+        {
+          "name": "Create player",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"playerId\", pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/players"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arjun\",\n  \"age\": 22,\n  \"position\": \"Batsman\",\n  \"teamId\": \"{{teamAId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get players of team A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/players?teamId={{teamAId}}"
+            }
+          }
+        },
+        {
+          "name": "Update player",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/players/{{playerId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arjun\",\n  \"age\": 23,\n  \"position\": \"Opener\",\n  \"teamId\": \"{{teamAId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "INVALID: negative player age",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Age must be greater than 0\", function () { pm.expect(pm.response.json().message).to.include(\"Age must be greater than 0\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/players"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kiran\",\n  \"age\": -5,\n  \"position\": \"Bowler\",\n  \"teamId\": \"{{teamAId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Matches",
+      "item": [
+        {
+          "name": "Create valid match (18:00-20:00)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"matchId\", pm.response.json().data._id);",
+                  "pm.test(\"Message contains: Match scheduled successfully.\", function () { pm.expect(pm.response.json().message).to.include(\"Match scheduled successfully.\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"18:00\",\n  \"endTime\": \"20:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CONFLICT: partial overlap (19:00-21:00)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Scheduling conflict\", function () { pm.expect(pm.response.json().message).to.include(\"Scheduling conflict\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"19:00\",\n  \"endTime\": \"21:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CONFLICT: exact same time",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Scheduling conflict\", function () { pm.expect(pm.response.json().message).to.include(\"Scheduling conflict\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"18:00\",\n  \"endTime\": \"20:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CONFLICT: new match contains existing (17:00-21:00)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Scheduling conflict\", function () { pm.expect(pm.response.json().message).to.include(\"Scheduling conflict\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"17:00\",\n  \"endTime\": \"21:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CONFLICT: teams swapped (Team B first)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Scheduling conflict\", function () { pm.expect(pm.response.json().message).to.include(\"Scheduling conflict\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamBId}}\",\n  \"teamB\": \"{{teamAId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"19:00\",\n  \"endTime\": \"21:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "OK: back-to-back (20:00-22:00)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"matchId2\", pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-18\",\n  \"startTime\": \"20:00\",\n  \"endTime\": \"22:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "INVALID: same team vs same team",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: cannot be the same team\", function () { pm.expect(pm.response.json().message).to.include(\"cannot be the same team\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamAId}}\",\n  \"date\": \"2026-10-20\",\n  \"startTime\": \"18:00\",\n  \"endTime\": \"20:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "INVALID: end time before start time",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: End time must be after start time\", function () { pm.expect(pm.response.json().message).to.include(\"End time must be after start time\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamA\": \"{{teamAId}}\",\n  \"teamB\": \"{{teamBId}}\",\n  \"date\": \"2026-10-20\",\n  \"startTime\": \"20:00\",\n  \"endTime\": \"18:00\",\n  \"venue\": \"Hyderabad Stadium\",\n  \"city\": \"Hyderabad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get matches",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/matches"
+            }
+          }
+        },
+        {
+          "name": "Get upcoming matches",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/matches?upcoming=true"
+            }
+          }
+        },
+        {
+          "name": "Update (reschedule) match to 19 Oct",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches/{{matchId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-10-19\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel match",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matches/{{matchId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Cancelled\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Flights",
+      "item": [
+        {
+          "name": "Create flight",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });",
+                  "pm.collectionVariables.set(\"flightId\", pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/flights"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"AI101\",\n  \"from\": \"Hyderabad\",\n  \"to\": \"Mumbai\",\n  \"price\": 4500,\n  \"durationMinutes\": 130,\n  \"availableSeats\": 20,\n  \"matchId\": \"{{matchId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create second flight",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/flights"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"6E202\",\n  \"from\": \"Hyderabad\",\n  \"to\": \"Mumbai\",\n  \"price\": 3800,\n  \"durationMinutes\": 155,\n  \"availableSeats\": 12,\n  \"matchId\": \"{{matchId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get flights for match",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flights?matchId={{matchId}}"
+            }
+          }
+        },
+        {
+          "name": "Find cheapest flight (expect 3800)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flights/cheapest?matchId={{matchId}}"
+            }
+          }
+        },
+        {
+          "name": "Find fastest flight (expect 130 min)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flights/fastest?matchId={{matchId}}"
+            }
+          }
+        },
+        {
+          "name": "INVALID: negative flight price",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Price must be 0 or more\", function () { pm.expect(pm.response.json().message).to.include(\"Price must be 0 or more\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/flights"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"XX1\",\n  \"from\": \"A\",\n  \"to\": \"B\",\n  \"price\": -100,\n  \"durationMinutes\": 60,\n  \"availableSeats\": 5,\n  \"matchId\": \"{{matchId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Cleanup",
+      "item": [
+        {
+          "name": "Delete flight",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flights/{{flightId}}"
+            }
+          }
+        },
+        {
+          "name": "Delete match (also deletes its flights)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/matches/{{matchId}}"
+            }
+          }
+        },
+        {
+          "name": "Delete back-to-back match",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/matches/{{matchId2}}"
+            }
+          }
+        },
+        {
+          "name": "Delete player",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/players/{{playerId}}"
+            }
+          }
+        },
+        {
+          "name": "Delete team A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/teams/{{teamAId}}"
+            }
+          }
+        },
+        {
+          "name": "Delete team B",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"success is true\", function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/teams/{{teamBId}}"
+            }
+          }
+        },
+        {
+          "name": "Get deleted team -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"success is false\", function () { pm.expect(pm.response.json().success).to.eql(false); });",
+                  "pm.test(\"Message contains: Team not found\", function () { pm.expect(pm.response.json().message).to.include(\"Team not found\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/teams/{{teamAId}}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
