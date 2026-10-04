@@ -6,7 +6,7 @@ A small full-stack app where a team manager creates teams and players, schedules
 **The core logic is written in C++.** Conflict detection and cheapest/fastest flight are done by a compiled C++ program that the Node backend runs. Node handles the API, validation and database.
 
 **Stack:** React (Vite) · Node.js + Express · MongoDB + Mongoose · C++ (algorithm module) · Postman
-
+LIVE: https://frontend-five-opal-96.vercel.app/
 ---
 
 ## 1. Folder structure
